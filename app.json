@@ -25,6 +25,12 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "396632cd-994a-47b1-aeb0-826d9a3ae830"
+      }
+    },
+    "owner": "bosey"
   }
 }
