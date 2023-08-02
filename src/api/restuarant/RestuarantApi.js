@@ -1,8 +1,9 @@
 import camelize from "camelize";
+import { MockImages, RestuarantData } from "./mock/data";
 
-export const restaurantApi = (location = "Hejjdllfjj") => {
+export const restaurantApi = (location) => {
   return new Promise((resolve, reject) => {
-    const mock = location;
+    const mock = RestuarantData.search(location.state);
     if (!mock) {
       return reject("Couldn't find a location");
     }
@@ -10,12 +11,10 @@ export const restaurantApi = (location = "Hejjdllfjj") => {
   });
 };
 
-export const transformResponse = ({ results = [] }) => {
+export const transformResponse = (results) => {
   const mappedResults = results.map((item) => {
-    item.photos = item.photos.map(() => {
-      return mockImages[Math.ceil(Math.random() * mockImages)];
-    });
-
+    item.image = MockImages[Math.floor(Math.random() * 11) + 1];
+    item.rating = Math.floor(Math.random() * 5) + 1;
     return {
       ...item,
       isClosedTemporarily: item.business === "CLOSED_TEMPORARILY",
@@ -26,11 +25,11 @@ export const transformResponse = ({ results = [] }) => {
   return mappedResults;
 };
 
-restaurantApi()
-  .then(transformResponse)
-  .then((result) => {
-    console.log(camelize(result));
-  })
-  .catch((err) => {
-    console.log(err);
-  });
+// restaurantApi()
+//   .then(transformResponse)
+//   .then((result) => {
+//     console.log("ln 33", camelize(result));
+//   })
+//   .catch((err) => {
+//     console.log(err);
+//   });

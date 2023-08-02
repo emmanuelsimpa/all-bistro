@@ -1,16 +1,14 @@
 import React, { useContext, useState } from "react";
-import { Searchbar } from "react-native-paper";
-import { FlatList } from "react-native";
+import { ActivityIndicator } from "react-native-paper";
+import { FlatList, Pressable, TouchableOpacity, View } from "react-native";
 import { ResturantsCard } from "../component/Resturants";
 import styled from "styled-components/native";
 import { Spacer } from "../../../component/spacer/Space";
 import { SafeArea } from "../../../utils/safeView.Js";
 import { RestuarantContext } from "../../../api/restuarant/ResturantContext";
-
-const SearchWrapper = styled.View`
-  flex-grow: 0;
-  padding: ${(props) => props.theme.space[3]};
-`;
+import Search from "../component/Search";
+import { FavouritesContext } from "../../../api/services/favouriteContext";
+import { FavouriteBar } from "../../../component/Favourite/FavouriteBar";
 
 const ResturantList = styled(FlatList).attrs({
   contentContainerStyle: {
@@ -18,43 +16,53 @@ const ResturantList = styled(FlatList).attrs({
   },
 })``;
 
-export const ResturantScreen = () => {
-  const [searchQuery, setSearchQuery] = useState("");
+const Loading = styled(ActivityIndicator)`
+  margin-left: -25px;
+  color: ${(props) => props.theme.colors.bg.primary};
+`;
+const LoadingContainer = styled.View`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 1;
+`;
 
-  const onChangeSearch = (query) => setSearchQuery(query);
-
+export const ResturantScreen = ({ navigation }) => {
   const { restuarants, isLoading, error } = useContext(RestuarantContext);
-  console.log("ln 27", restuarants, isLoading, error);
+  const { favourites } = useContext(FavouritesContext);
+  const [isToggled, setIsToggled] = useState(false);
 
   return (
     <SafeArea>
-      <SearchWrapper>
-        <Searchbar
-          placeholder="Search"
-          onChangeText={onChangeSearch}
-          value={searchQuery}
-        />
-      </SearchWrapper>
+      {isLoading && (
+        <LoadingContainer>
+          <Loading size={60} animating={true} />
+        </LoadingContainer>
+      )}
+      <Search
+        onFavouriteToggle={() => setIsToggled(!isToggled)}
+        isFavouriteToggled={isToggled}
+      />
+      {isToggled && (
+        <FavouriteBar favourites={favourites} navigation={navigation} />
+      )}
       <ResturantList
-        data={[
-          { name: 1 },
-          { name: 2 },
-          { name: 3 },
-          { name: 4 },
-          { name: 5 },
-          { name: 6 },
-          { name: 7 },
-          { name: 8 },
-          { name: 9 },
-          { name: 10 },
-        ]}
+        data={restuarants}
         // data={restuarantContext.restuarant}
-        renderItem={() => (
-          <Spacer variant="bottom.large">
-            <ResturantsCard />
-          </Spacer>
-        )}
-        keyExtractor={(item) => item.name}
+        renderItem={({ item }) => {
+          return (
+            <TouchableOpacity
+              onPress={() =>
+                navigation.navigate("restaurantDetails", { restuarant: item })
+              }
+            >
+              <Spacer variant="bottom.large">
+                <ResturantsCard restuarant={item} />
+              </Spacer>
+            </TouchableOpacity>
+          );
+        }}
+        keyExtractor={(item) => item.id}
       />
     </SafeArea>
   );

@@ -1,8 +1,5 @@
 import { ThemeProvider } from "styled-components/native";
-import { NavigationContainer } from "@react-navigation/native";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { Ionicons } from "@expo/vector-icons";
-import { ResturantScreen } from "./src/features/resturant/screens/Screen";
+import { initializeApp } from "firebase/app";
 import { theme } from "./src/utils/theme";
 import { useFonts as useLato, Lato_400Regular } from "@expo-google-fonts/lato";
 import {
@@ -10,25 +7,23 @@ import {
   Oswald_400Regular,
 } from "@expo-google-fonts/oswald";
 import { RestuarantProvider } from "./src/api/restuarant/ResturantContext";
+import { LocationContextProvider } from "./src/api/services/locationContext";
+import { FavouriteContextProvider } from "./src/api/services/favouriteContext";
+import Routes from "./src/route";
 
-const Tab = createBottomTabNavigator();
-
-const TAB_ICON = {
-  Restuarant: "md-restaurant",
-  Map: "md-map",
-  Settings: "md-settings",
+// Initialize Firebase
+const firebaseConfig = {
+  apiKey: "api-key",
+  authDomain: "project-id.firebaseapp.com",
+  databaseURL: "https://project-id.firebaseio.com",
+  projectId: "project-id",
+  storageBucket: "project-id.appspot.com",
+  messagingSenderId: "sender-id",
+  appId: "app-id",
+  measurementId: "G-measurement-id",
 };
 
-const screenOptions = ({ route }) => {
-  const iconName = TAB_ICON[route.name];
-  return {
-    tabBarIcon: ({ size, color }) => (
-      <Ionicons name={iconName} size={size} color={color} />
-    ),
-    tabBarActiveTintColor: "tomato",
-    tabBarInactiveTintColor: "gray",
-  };
-};
+const app = initializeApp(firebaseConfig);
 
 const App = () => {
   const [latoLoaded] = useLato({
@@ -43,15 +38,13 @@ const App = () => {
   }
   return (
     <ThemeProvider theme={theme}>
-      <RestuarantProvider>
-        <NavigationContainer>
-          <Tab.Navigator screenOptions={screenOptions}>
-            <Tab.Screen name="Restuarant" component={ResturantScreen} />
-            <Tab.Screen name="Map" component={ResturantScreen} />
-            <Tab.Screen name="Settings" component={ResturantScreen} />
-          </Tab.Navigator>
-        </NavigationContainer>
-      </RestuarantProvider>
+      <FavouriteContextProvider>
+        <LocationContextProvider>
+          <RestuarantProvider>
+            <Routes />
+          </RestuarantProvider>
+        </LocationContextProvider>
+      </FavouriteContextProvider>
     </ThemeProvider>
   );
 };

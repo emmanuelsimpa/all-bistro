@@ -13,22 +13,23 @@ import {
   RestautantCard,
   RestautantCardCover,
 } from "./styles";
+import { Favourite } from "../../../component/Favourite/Favourite";
 
-export const ResturantsCard = ({ resturant = {} }) => {
+export const ResturantsCard = ({ restuarant }) => {
   const {
-    name = "Some Restautant",
+    name,
     icon = "https://picsum.photos/200",
-    photos = "https://www.foodiesfeed.com/wp-content/uploads/2019/06/top-view-for-box-of-2-burgers-home-made.jpg",
-    address = "",
+    image,
+    address,
     isOpenNow = true,
-    rating = 5,
+    rating,
     isClosedTemporarily = true,
-  } = resturant;
-
+  } = restuarant;
   const starArray = Array.from(new Array(Math.floor(rating)));
   return (
     <RestautantCard elevation={5}>
-      <RestautantCardCover key={name} source={{ uri: photos }} />
+      <Favourite resturant={restuarant} />
+      <RestautantCardCover key={name} source={{ uri: image }} />
       <Info>
         <Text>{name}</Text>
         <RatingWrapper>
@@ -60,7 +61,7 @@ export const ResturantsCard = ({ resturant = {} }) => {
             />
           </RatingOpen>
         </RatingWrapper>
-        <Address>{name}</Address>
+        <Address>{address}</Address>
       </Info>
     </RestautantCard>
   );

@@ -41,9 +41,9 @@ const RightLarge = styled.View`
 export const Spacer = ({ variant, children }) => {
   switch (variant) {
     case "top.medium":
-      return <TopMedium />;
+      return <TopMedium>{children}</TopMedium>;
     case "top.large":
-      return <TopLarge />;
+      return <TopLarge>{children}</TopLarge>;
     case "bottom.small":
       return <BottomSmall>{children}</BottomSmall>;
     case "bottom.medium":
