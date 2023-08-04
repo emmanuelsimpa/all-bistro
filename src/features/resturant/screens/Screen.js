@@ -1,8 +1,9 @@
 import React, { useContext, useState } from "react";
 import { ActivityIndicator } from "react-native-paper";
-import { FlatList, Pressable, TouchableOpacity, View } from "react-native";
-import { ResturantsCard } from "../component/Resturants";
+import { FlatList, TouchableOpacity } from "react-native";
 import styled from "styled-components/native";
+
+import { ResturantsCard } from "../component/Resturants";
 import { Spacer } from "../../../component/spacer/Space";
 import { SafeArea } from "../../../utils/safeView.Js";
 import { RestuarantContext } from "../../../api/restuarant/ResturantContext";
