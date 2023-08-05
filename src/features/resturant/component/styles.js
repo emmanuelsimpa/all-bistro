@@ -1,5 +1,12 @@
 import { Card } from "react-native-paper";
+import { FlatList } from "react-native";
 import styled from "styled-components/native";
+
+export const ResturantList = styled(FlatList).attrs({
+  contentContainerStyle: {
+    padding: 16,
+  },
+})``;
 
 export const RestautantCard = styled(Card)`
   background-color: ${(props) => props.theme.colors.bg.primary};
