@@ -1,14 +1,44 @@
 import React from "react";
-import { BackGroundImage } from "../component/bgImage";
-import { Text, View } from "react-native";
+import LottieView from "lottie-react-native";
 
-export function AccountScreen() {
+import {
+  AccountContainer,
+  AnimationWrapper,
+  AuthButton,
+  BackGroundImage,
+} from "../component/bgImage";
+import { Spacer } from "../../../component/spacer/Space";
+
+export function AccountScreen({ navigation }) {
   return (
-    <View>
-      <Text>Hello</Text>
-      <Text>Hello</Text>
-      <Text>Hell</Text>
-      <Text>Hell</Text>
-    </View>
+    <BackGroundImage>
+      {/* <AnimationWrapper> */}
+      <LottieView
+        key="animation"
+        autoPlay
+        loop
+        resizeMode="cover"
+        source={require("../../../../assets/lottieBistro.json")}
+      />
+      {/* </AnimationWrapper> */}
+      <AccountContainer>
+        <AuthButton
+          icon="lock-open-outline"
+          mode="contained"
+          onPress={() => navigation.navigate("Login")}
+        >
+          LOGIN
+        </AuthButton>
+        <Spacer variant="top.large">
+          <AuthButton
+            icon="lock-open-outline"
+            mode="contained"
+            onPress={() => navigation.navigate("Register")}
+          >
+            REGISTER
+          </AuthButton>
+        </Spacer>
+      </AccountContainer>
+    </BackGroundImage>
   );
 }

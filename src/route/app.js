@@ -1,9 +1,14 @@
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Ionicons } from "@expo/vector-icons";
-import { ResturantScreen } from "../features/resturant/screens/Screen";
+
 import { RestuarantNavigation } from "./resturantNav";
 import { Mapscreen } from "../features/map/screens/screen";
+import { SettingsNavigation } from "./settingsNav";
+
+import { FavouriteContextProvider } from "../api/services/favouriteContext";
+import { LocationContextProvider } from "../api/services/locationContext";
+import { RestuarantProvider } from "../api/restuarant/ResturantContext";
 
 const Tab = createBottomTabNavigator();
 
@@ -26,18 +31,28 @@ const screenOptions = ({ route }) => {
 
 export function AppNavigation() {
   return (
-    <Tab.Navigator screenOptions={screenOptions}>
-      <Tab.Screen
-        name="Restuarant"
-        component={RestuarantNavigation}
-        options={{ headerShown: false }}
-      />
-      <Tab.Screen
-        name="Map"
-        component={Mapscreen}
-        options={{ headerShown: false }}
-      />
-      <Tab.Screen name="Settings" component={ResturantScreen} />
-    </Tab.Navigator>
+    <FavouriteContextProvider>
+      <LocationContextProvider>
+        <RestuarantProvider>
+          <Tab.Navigator screenOptions={screenOptions}>
+            <Tab.Screen
+              name="Restuarant"
+              component={RestuarantNavigation}
+              options={{ headerShown: false }}
+            />
+            <Tab.Screen
+              name="Map"
+              component={Mapscreen}
+              options={{ headerShown: false }}
+            />
+            <Tab.Screen
+              name="Settings"
+              component={SettingsNavigation}
+              options={{ headerShown: false }}
+            />
+          </Tab.Navigator>
+        </RestuarantProvider>
+      </LocationContextProvider>
+    </FavouriteContextProvider>
   );
 }

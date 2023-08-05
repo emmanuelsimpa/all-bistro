@@ -15,7 +15,6 @@ import { RestuarantProvider } from "./src/api/restuarant/ResturantContext";
 import { LocationContextProvider } from "./src/api/services/locationContext";
 import { FavouriteContextProvider } from "./src/api/services/favouriteContext";
 import Routes from "./src/route";
-import { useEffect, useState } from "react";
 import { AuthenticationContextProvider } from "./src/api/auth/auth.context";
 
 // Initialize Firebase
@@ -48,13 +47,10 @@ const App = () => {
   return (
     <ThemeProvider theme={theme}>
       <AuthenticationContextProvider>
-        <FavouriteContextProvider>
-          <LocationContextProvider>
-            <RestuarantProvider>
-              <Routes />
-            </RestuarantProvider>
+        <Routes />
+        {/* </RestuarantProvider>
           </LocationContextProvider>
-        </FavouriteContextProvider>
+        </FavouriteContextProvider> */}
       </AuthenticationContextProvider>
     </ThemeProvider>
   );

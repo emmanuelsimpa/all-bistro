@@ -6,6 +6,7 @@ import { ResturantScreen } from "../features/resturant/screens/Screen";
 import { ResturantDetail } from "../features/resturant/screens/ResturantDetail";
 
 const RestuarantStack = createStackNavigator();
+
 const forFade = ({ current }) => ({
   cardStyle: {
     transform: [

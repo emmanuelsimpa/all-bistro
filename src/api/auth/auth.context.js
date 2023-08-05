@@ -1,36 +1,93 @@
 import { createContext, useState } from "react";
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  onAuthStateChanged,
+  signOut,
+} from "firebase/auth";
 import { loginRequest } from "./authApi";
 
 export const AuthenticationContext = createContext();
 
+const isValidEmail = (email) => {
+  const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+  return emailRegex.test(email);
+};
+
 export const AuthenticationContextProvider = ({ children }) => {
+  const auth = getAuth();
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [error, setError] = useState(null);
 
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      const uid = user.uid;
+      setUser(user);
+      setIsLoading(false);
+    } else {
+      setIsLoading(false);
+    }
+  });
   const onLogin = (email, password) => {
+    console.log("onLogin", email, password);
     setIsLoading(true);
-    loginRequest(email, password)
+    // if (email || password) {
+    //   isValidEmail(email) === false
+    //     ? setError("Email is not valid")
+    //     : password.length === null
+    //     ? setError("Password should be more than 4")
+    //     : "";
+    //   return;
+    // }
+
+    // if (isValidEmail(email) === true && password.length > 4) {
+    signInWithEmailAndPassword(auth, email, password)
       .then((user) => {
         console.log("ln44", user.user);
-        setIsAuthenticated(true);
         setUser(user);
         setIsLoading(false);
       })
       .catch((e) => {
         setIsLoading(false);
-        setError(e);
+        setError(e.code);
       });
   };
+  // };
+
+  const onRegister = (email, password) => {
+    setIsLoading(true);
+    // if (isValidEmail(email) === true && password.length > 4) {
+    createUserWithEmailAndPassword(auth, email, password)
+      .then((user) => {
+        console.log("ln44", user.user);
+        setUser(user);
+        setIsLoading(false);
+      })
+      .catch((e) => {
+        setIsLoading(false);
+        setError(e.code);
+      });
+    //   return;
+    // }
+  };
+
+  const onLogout = () => {
+    setUser(null);
+    signOut(auth);
+  };
+
   return (
     <AuthenticationContext.Provider
       value={{
         user,
-        isAuthenticated,
+        isAuthenticated: !!user,
         isLoading,
         error,
         onLogin,
+        onRegister,
+        onLogout,
       }}
     >
       {children}
