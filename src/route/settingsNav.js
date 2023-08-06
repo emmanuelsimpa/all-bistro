@@ -5,6 +5,7 @@ import {
 } from "@react-navigation/stack";
 import { Settingsscreen } from "../features/settings/screens/screen";
 import { FavouriteScreen } from "../features/settings/screens/favouriteScreen";
+import { CameraScreen } from "../features/settings/screens/cameraScreen";
 
 const SettingsStack = createStackNavigator();
 
@@ -42,8 +43,13 @@ export function SettingsNavigation() {
         component={FavouriteScreen}
         options={{
           headerShown: true,
-          //   cardStyleInterpolator: forFade,
-          //   presentation: "modal",
+        }}
+      />
+      <SettingsStack.Screen
+        name="Camera"
+        component={CameraScreen}
+        options={{
+          headerShown: true,
         }}
       />
     </SettingsStack.Navigator>

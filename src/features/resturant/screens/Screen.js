@@ -43,26 +43,26 @@ export const ResturantScreen = ({ navigation }) => {
       {isToggled && (
         <FavouriteBar favourites={favourites} navigation={navigation} />
       )}
-      <FadeInView>
-        <ResturantList
-          data={restuarants}
-          // data={restuarantContext.restuarant}
-          renderItem={({ item }) => {
-            return (
-              <TouchableOpacity
-                onPress={() =>
-                  navigation.navigate("restaurantDetails", { restuarant: item })
-                }
-              >
-                <Spacer variant="bottom.large">
-                  <ResturantsCard restuarant={item} />
-                </Spacer>
-              </TouchableOpacity>
-            );
-          }}
-          keyExtractor={(item) => item.id}
-        />
-      </FadeInView>
+      {/* <FadeInView> */}
+      <ResturantList
+        data={restuarants}
+        // data={restuarantContext.restuarant}
+        renderItem={({ item }) => {
+          return (
+            <TouchableOpacity
+              onPress={() =>
+                navigation.navigate("restaurantDetails", { restuarant: item })
+              }
+            >
+              <Spacer variant="bottom.large">
+                <ResturantsCard restuarant={item} />
+              </Spacer>
+            </TouchableOpacity>
+          );
+        }}
+        keyExtractor={(item) => item.id}
+      />
+      {/* </FadeInView> */}
     </SafeArea>
   );
 };

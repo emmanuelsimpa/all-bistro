@@ -1,7 +1,7 @@
 import React, { useRef, useEffect } from "react";
 import { Animated, Text, View } from "react-native";
 
-export const FadeInView = ({ duration = 1500, ...props }) => {
+export const FadeInView = ({ duration = 500, ...props }) => {
   const fadeAnim = useRef(new Animated.Value(0)).current; // Initial value for opacity: 0
 
   useEffect(() => {

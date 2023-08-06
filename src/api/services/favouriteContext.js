@@ -8,18 +8,18 @@ export function FavouriteContextProvider({ children }) {
   const { user } = useContext(AuthenticationContext);
   const [favourites, setFavourites] = useState([]);
 
-  const saveFavourite = async (value, uid) => {
+  const saveFavourite = async (value) => {
     try {
       const jsonValue = JSON.stringify(value);
-      await AsyncStorage.setItem(`@favourite-${uid}`, jsonValue);
+      await AsyncStorage.setItem(`@favourite-${user.uid}`, jsonValue);
     } catch (e) {
       console.log("Error Saving", e);
     }
   };
 
-  const getFavourite = async (uid) => {
+  const getFavourite = async () => {
     try {
-      const jsonValue = await AsyncStorage.getItem(`@favourite-${uid}`);
+      const jsonValue = await AsyncStorage.getItem(`@favourite-${user.uid}`);
       if (jsonValue !== null) {
         return setFavourites(JSON.parse(jsonValue));
       }
@@ -30,13 +30,13 @@ export function FavouriteContextProvider({ children }) {
 
   useEffect(() => {
     if (user) {
-      getFavourite(user.uid);
+      getFavourite();
     }
   }, [user]);
 
   useEffect(() => {
     if (user) {
-      saveFavourite(favourites, user.uid);
+      saveFavourite(favourites);
     }
   }, [favourites, user]);
 

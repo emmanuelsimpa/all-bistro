@@ -1,4 +1,4 @@
-import { createContext, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import {
   getAuth,
   createUserWithEmailAndPassword,
@@ -6,7 +6,6 @@ import {
   onAuthStateChanged,
   signOut,
 } from "firebase/auth";
-import { loginRequest } from "./authApi";
 
 export const AuthenticationContext = createContext();
 
@@ -21,17 +20,18 @@ export const AuthenticationContextProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  onAuthStateChanged(auth, (user) => {
-    if (user) {
-      const uid = user.uid;
-      setUser(user);
-      setIsLoading(false);
-    } else {
-      setIsLoading(false);
-    }
-  });
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setUser(user);
+        setIsLoading(false);
+      } else {
+        setIsLoading(false);
+      }
+    });
+  }, []);
+
   const onLogin = (email, password) => {
-    console.log("onLogin", email, password);
     setIsLoading(true);
     // if (email || password) {
     //   isValidEmail(email) === false
@@ -45,8 +45,7 @@ export const AuthenticationContextProvider = ({ children }) => {
     // if (isValidEmail(email) === true && password.length > 4) {
     signInWithEmailAndPassword(auth, email, password)
       .then((user) => {
-        console.log("ln44", user.user);
-        setUser(user);
+        setUser(user.user);
         setIsLoading(false);
       })
       .catch((e) => {
@@ -54,15 +53,13 @@ export const AuthenticationContextProvider = ({ children }) => {
         setError(e.code);
       });
   };
-  // };
 
   const onRegister = (email, password) => {
     setIsLoading(true);
     // if (isValidEmail(email) === true && password.length > 4) {
     createUserWithEmailAndPassword(auth, email, password)
       .then((user) => {
-        console.log("ln44", user.user);
-        setUser(user);
+        setUser(user.user);
         setIsLoading(false);
       })
       .catch((e) => {
